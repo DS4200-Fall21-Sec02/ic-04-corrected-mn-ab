@@ -105,7 +105,7 @@ let margin = {
       .attr("y", d => yScale(d.Y))
       .attr("width", innerWidth/data.length-1.5)
       .attr("height", (d) => innerHeight - yScale(d.Y))
-      .attr("fill", d => d.Y == d3.max(data, d => d.Y) ? "#f4c430" : "green")
+      .attr("fill", d => d.Y == d3.max(data, d => d.Y) ? "#F07910" : "red")
       .append("text")
         .attr("x", 5*3)
         .attr("y", (d,i) => i*5)
