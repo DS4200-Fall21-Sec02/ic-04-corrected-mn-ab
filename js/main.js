@@ -142,7 +142,7 @@ let svg1 = d3.select('#vis1')
 .attr("transform", `translate(${margin.left},${margin.top})`)
 
 // Load data from csv 
-let data = d3.csv("/data/population_spain.csv")
+let data = d3.csv("https://raw.githubusercontent.com/DS4200-Fall21-Sec02/ic-04-corrected-mn-ab/main/data/population_spain.csv")
 data.then(function(data) {
 
   // Legend definition
@@ -303,7 +303,7 @@ let svg2 = d3.select('#vis2')
 .attr('viewBox', [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom].join(' '))
 
 // read Data
-let iris = d3.csv("data/iris.csv")
+let iris = d3.csv("https://raw.githubusercontent.com/DS4200-Fall21-Sec02/ic-04-corrected-mn-ab/main/data/Iris.csv")
 // present viz
 iris.then(function(data) {
 // Discrete Color Scale
