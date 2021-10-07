@@ -105,10 +105,9 @@ let margin = {
       .attr("width", innerWidth/data.length-1.5)
       .attr("height", (d) => innerHeight - yScale(d.Y))
       .attr("fill","#F37218")
-      .append("text")
-        .attr("x", 5*3)
-        .attr("y", (d,i) => i*5)
-        .text(d => d.Y);
+      .append('title')
+        .text(function (d) { return 'X: ' + d.X +
+                         '\nY: ' + d.Y});
 
     mainG
       .append("g")
