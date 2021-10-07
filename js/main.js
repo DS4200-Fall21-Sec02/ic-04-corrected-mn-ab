@@ -8,7 +8,7 @@ let margin = {
     right: 100,
     bottom: 100
   },
-  width = 1000,
+  width = 800,
   height = 500;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
@@ -17,7 +17,6 @@ let margin = {
 
   d3.csv('https://raw.githubusercontent.com/DS4200-Fall21-Sec02/ic-04-corrected-mn-ab/main/data/data.csv').then((data, error) => {
     if (error) throw error;
-    // console.log(data);
   
     data.forEach(d => {
       d.X = d.X;
@@ -27,7 +26,7 @@ let margin = {
   // Create a select dropdown
   const mySelection = document.getElementById("drop_down");
 
-  d3.select(mySelection).append("span").append("p").attr("class", "label").text("How should these bars sorted?").style("font-weight", "bold").style("color", "red").style("font-size", "25px");
+  d3.select(mySelection).append("span").append("p").attr("class", "label").text("How would you like to sort the values?").style("font-weight", "bold").style("color", "black").style("font-size", "20px");
 
   const selectItems = ["Alphabetically", "Ascendingly", "Descendingly"];
 
@@ -74,7 +73,7 @@ let margin = {
     const xScale = d3.scaleBand()
     .domain(data.map((d) => d.X))
     .rangeRound([0, innerWidth])
-    .paddingInner(0.05);
+    .paddingInner(0.2);
 
     const yScale = d3.scaleLinear()
       .domain([0,d3.max(data, d => d.Y)]).nice()
@@ -105,7 +104,7 @@ let margin = {
       .attr("y", d => yScale(d.Y))
       .attr("width", innerWidth/data.length-1.5)
       .attr("height", (d) => innerHeight - yScale(d.Y))
-      .attr("fill", d => d.Y == d3.max(data, d => d.Y) ? "#F07910" : "red")
+      .attr("fill","#F37218")
       .append("text")
         .attr("x", 5*3)
         .attr("y", (d,i) => i*5)
