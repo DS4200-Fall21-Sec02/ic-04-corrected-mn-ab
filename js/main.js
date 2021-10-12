@@ -68,10 +68,10 @@ let margin = {
     const xScale = d3.scaleBand()
     .domain(data.map((d) => d.X))
     .rangeRound([0, innerWidth/data.length/2 + innerWidth])
-    .paddingInner(0.2);
+    .paddingInner(.2);
 
     const yScale = d3.scaleLinear()
-      .domain([0,d3.max(data, d => d.Y)]).nice()
+      .domain([0,100]).nice()
       .range([innerHeight, 0]);
 
     const xAxis = d3.axisBottom().scale(xScale);
@@ -95,9 +95,9 @@ let margin = {
 
     g.append("rect")
       .attr("class", "bars")
-      .attr("x", d => xScale(d.X) - innerWidth/data.length/2)
+      .attr("x", d => xScale(d.X) - innerWidth/data.length/2+2.5)
       .attr("y", d => yScale(d.Y))
-      .attr("width", innerWidth/data.length-10)
+      .attr("width", innerWidth/data.length-5)
       .attr("height", (d) => innerHeight - yScale(d.Y))
       .attr("fill","#F37218")
       .append('title')
