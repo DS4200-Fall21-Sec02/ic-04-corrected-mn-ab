@@ -10,8 +10,10 @@
   <div style="text-align: center;">
     <h1>D3 Practice</h1>
 
-    <div id="drop_down"></div>
-    <div id="d3-container">
+    <p>Choose a type of sorting:</p>
+
+    <div id="drop_list"></div>
+    <div id="container">
     </div>
 
   </div>
@@ -20,11 +22,23 @@
     <div class='vis-holder' id='vis1'></div>
     <p>For this first visualization we decided to use a dataset from the Spanish national institute of statistics about the population employment in different time spans, additionally we have separated our data in age spans to provide a more insightful analysis. We decided to use this dataset to represent the unemployment situation in our home country which is critical at the moment, more specifically we were interested in evaluating the situation in our age range since we will be finishing college in the next couple of years. According to the type of data that we have, two categorical and one continuous variables, it seemed more fitting to represent it using a grouped stacked bar chart for a more interesting visualization and observation of the evolution of the employment rates.</p>
 
-    <h2>Scatterplot: Iris Dataset</h2>
+  <h2>Scatterplot: Iris Dataset</h2>
 
     <div class='vis-holder' id='vis2'></div>
     <p>For the second visualization we selected the Iris dataset which is a commonly used dataset among the machine learning community, it provides insightful information about the flower different species and its characteristics. Another reason why we decided to use this dataset is that we wanted to reflect how we can apply different areas of the data and computer science together, in this case, machine learning and data visualization and representation. In this case, we could have not used this dataset for the bar chart without having to operate on it first to obtain a second categorical variable, since in it we can only find the specie type and then all its continuous characteristics. Regarding the selection of attributes, we studied the different combinations and reached the conclusion that the Sepal length against the Petal width showed the most interesting conclusions as you can see a clear relationship between these variables and its associated species.</p>
 
+  <h2>Acknowledgments</h2>
+  <ul>
+    <li><a href='https://dev.to/learningmonk/sortable-bar-chart-with-d3-js-k3b'>
+      Sortable Bar Chart with D3.js</a>
+      by Learning Monk is used for creating this assignment.
+    </li>
+    <li><a href='https://vaibhavkumar-19430.medium.com/how-to-create-a-grouped-bar-chart-in-d3-js-232c54f85894'>
+      Create a grouped bar chart in D3</a>
+      by Vaibhav Kumar is used to create this assignment.
+    </li>
+    <li><a href="http://bl.ocks.org/jfreels/6816504">d3js: Scatterplot using CSV data</a> by Justin Freels is used to create this assignment.
+  </ul>
   <script type="text/javascript" src="js/main.js"></script>
 
 </body>

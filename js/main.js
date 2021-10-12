@@ -7,123 +7,128 @@ let margin = {
     right: 30,
     bottom: 35
   },
+  // We define the layout variables so it accomodates to the window size
   width = 500 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
-  const innerWidth = width - margin.left - margin.right;
-  const innerHeight = height - margin.top - margin.bottom;
+  var innerW = width - margin.left - margin.right;
+  var innerH = height - margin.top - margin.bottom;
   barPadding = .2;
   axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
 
+  // We load the data from the data folder and map it to local variables for its use
   d3.csv('https://raw.githubusercontent.com/DS4200-Fall21-Sec02/ic-04-corrected-mn-ab/main/data/data.csv').then((data, error) => {
     if (error) throw error;
-  
     data.forEach(d => {
       d.X = d.X;
-      d.Y = +d.Y;
+      d.Y = d.Y;
     });
 
-  // Create a select dropdown
-  const mySelection = document.getElementById("drop_down");
+  // We define two new variables that correspond to the drop down list and the different choices in it
+  var listChoices = document.getElementById("drop_list");
+  var choice = ["Sort alphabetically", "Sort ascendingly"];
 
-  d3.select(mySelection).append("span").append("p").attr("class", "label").text("How would you like to sort the values?").style("font-weight", "bold").style("color", "black").style("font-size", "20px");
-
-  const selectItems = ["Alphabetically", "Ascendingly"];
-
-  // Create a drop down
-  d3.select(mySelection)
+  // We create the drop down menu by adding a span element with the different octions defined just before
+  d3.select(listChoices)
     .append("span")
     .append("select")
-    .attr("id", "selection")
-    .attr("name", "tasks")
+    .attr("id", "chosenOption")
+    .attr("name", "options")
     .selectAll("option")
-    .data(selectItems)
+    .data(choice)
     .enter()
     .append("option")
     .attr("value", d => d)
     .text(d => d);
 
-  // When the page loads, the chart which sorted alphabetically loads by default
-  document.addEventListener("DOMContentLoaded", myChart()); 
+  // We identify what the user selection is, organize the data accordingly and call our graph method that builds the graphic
+  d3.select("#chosenOption").on("change", function() {
 
-  // Chart changes based on drop down selection
-  d3.select("#selection").on("change", function() {
-    const selectedOption = d3.select(this).node().value;
-    if (selectedOption == "Ascendingly") {
-      data.sort((a,b) => {
-        return d3.ascending(a.Y, b.Y)
-      }) 
-    } else if (selectedOption == "Alphabetically") {
+    if (d3.select(this).node().value == "Sort alphabetically") {
       data.sort((a,b) => {
         return d3.ascending(a.X, b.X)
       })
-    }
-    myChart();
+    } else if (d3.select(this).node().value == "Sort ascendingly") {
+      data.sort((a,b) => {
+        return d3.ascending(a.Y, b.Y)
+      }) 
+    } 
+    // Display graph with the new selection
+    graphFunc();
   })
 
-  function myChart () {
-    // Append SVG to this DIV
-    const chartDIV = document.createElement("div");
+  // With an event listener we set the chart to be displayed when the page is loaded initially
+  document.addEventListener("DOMContentLoaded", graphFunc()); 
 
-    // Create scales
-    const xScale = d3.scaleBand()
-    .domain(data.map((d) => d.X))
-    .rangeRound([0, innerWidth/data.length/2 + innerWidth])
+  // Next we define the graph builder function
+  function graphFunc () {
+    // Find the element that will contain the visualization
+    var svg0 = document.createElement("div");
+
+    // Add the scales for the axis and define them accordingly
+    var xAxisScale = d3.scaleBand()
+    .domain(data.map((d) => d.X)) // Range of x values
+    .rangeRound([0, innerW/data.length/2 + innerW])
     .paddingInner(.2);
 
-    const yScale = d3.scaleLinear()
-      .domain([0,100]).nice()
-      .range([innerHeight, 0]);
+    var yAxisScale = d3.scaleLinear()
+      .domain([0,100]).nice() // Range of y values
+      .range([innerH, 0]);
 
-    const xAxis = d3.axisBottom().scale(xScale);
+    // Choose axis and add scale
+    var xAxis = d3.axisBottom().scale(xAxisScale); 
+    var yAxis = d3.axisLeft().scale(yAxisScale);
 
-    const yAxis = d3.axisLeft().scale(yScale);
-
-    const svg = d3.select(chartDIV)
+    // We select the visualization holder and add the svg viewbox
+    var svg = d3.select(svg0)
       .append("svg")
-      .attr("viewBox", [0,0,width,height]);
-
-    const mainG = svg
+      .attr("viewBox", [0,0,width,height])
+      // We use the next piece of code to properly place the bars into their corresponding y value
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const g = mainG
+    // We use the next piece of code to center properly the bars into their corresponding x value
+    var g = svg
       .selectAll("g")
       .data(data)
       .enter()
       .append("g")
-      .attr("transform", `translate(${innerWidth/data.length/2 + barPadding},0)`);
+      .attr("transform", `translate(${innerW/data.length/2 + barPadding},0)`);
 
+    // We append the visualization the two axis with its values.
+    svg
+      .append("g")
+      .call(xAxis)
+      .attr("transform", `translate(0, ${innerH})`);
+
+    svg
+      .append("g")
+      .call(yAxis);
+    
+    // We append each bar with its corresponding values and placement, as well as the color and tooltip
     g.append("rect")
       .attr("class", "bars")
-      .attr("x", d => xScale(d.X) - innerWidth/data.length/2+2.5)
-      .attr("y", d => yScale(d.Y))
-      .attr("width", innerWidth/data.length-5)
-      .attr("height", (d) => innerHeight - yScale(d.Y))
-      .attr("fill","#F37218")
+      .attr("fill","#F37218") // Closest color found compared to the sample picture
+      .attr("x", d => xAxisScale(d.X) - innerW/data.length/2)
+      .attr("y", d => yAxisScale(d.Y))
+      .attr("width", innerW/data.length-5)
+      .attr("height", (d) => innerH - yAxisScale(d.Y))
+      // Tooltip
       .append('title')
         .text(function (d) { return 'X: ' + d.X +
                          '\nY: ' + d.Y});
 
-    mainG
-      .append("g")
-      .call(xAxis)
-      .attr("transform", `translate(0, ${innerHeight})`);
-
-    mainG
-      .append("g")
-      .call(yAxis);
-
-    // This code will redraw charts based on dropdown selection. At any point in time, chartContainer DIV only contains one chart. The charts are recycled.
-    const showChart = document.getElementById("d3-container");
+    // With the next piece of code we change the graph according to the user's selection, eliminate the previous selection and draw the new one.
+    var showChart = document.getElementById("container");
     while (showChart.firstChild) {
-      showChart.firstChild.remove();
+      showChart.firstChild.remove(); // Delete previous graph
     }
-    showChart.appendChild(chartDIV);
+    showChart.appendChild(svg0);
 
   }
   })
 
-  // first visualization
+  
+// First visualization from hw3
 let svg1 = d3.select('#vis1')
 .append('svg')
 .attr('preserveAspectRatio', 'xMidYMid meet') // this will scale your visualization according to the size of its parent element and the page.
@@ -287,7 +292,7 @@ svg1.append("text")
  .text("Spanish Employment Rates");
 })
 
-// second visualization
+// Second visualization from hw3
 let svg2 = d3.select('#vis2')
 .append('svg')
 .attr('preserveAspectRatio', 'xMidYMid meet') // this will scale your visualization according to the size of its parent element and the page.
