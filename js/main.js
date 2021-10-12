@@ -1,15 +1,14 @@
 
 // write your javascript code here.
 // feel free to change the pre-set attributes as you see fit
-
 let margin = {
-    top: 50,
-    left: 100,
-    right: 100,
-    bottom: 100
+    top: 60,
+    left: 50,
+    right: 30,
+    bottom: 35
   },
-  width = 800,
-  height = 500;
+  width = 500 - margin.left - margin.right,
+  height = 500 - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   barPadding = .2;
@@ -28,7 +27,7 @@ let margin = {
 
   d3.select(mySelection).append("span").append("p").attr("class", "label").text("How would you like to sort the values?").style("font-weight", "bold").style("color", "black").style("font-size", "20px");
 
-  const selectItems = ["Alphabetically", "Ascendingly", "Descendingly"];
+  const selectItems = ["Alphabetically", "Ascendingly"];
 
   // Create a drop down
   d3.select(mySelection)
@@ -53,10 +52,6 @@ let margin = {
       data.sort((a,b) => {
         return d3.ascending(a.Y, b.Y)
       }) 
-    } else if (selectedOption == "Descendingly") {
-      data.sort((a,b) => {
-        return d3.descending(a.Y, b.Y)
-      })
     } else if (selectedOption == "Alphabetically") {
       data.sort((a,b) => {
         return d3.ascending(a.X, b.X)
@@ -72,7 +67,7 @@ let margin = {
     // Create scales
     const xScale = d3.scaleBand()
     .domain(data.map((d) => d.X))
-    .rangeRound([0, innerWidth])
+    .rangeRound([0, innerWidth/data.length/2 + innerWidth])
     .paddingInner(0.2);
 
     const yScale = d3.scaleLinear()
@@ -96,13 +91,13 @@ let margin = {
       .data(data)
       .enter()
       .append("g")
-      .attr("transform", `translate(15,0)`);
+      .attr("transform", `translate(${innerWidth/data.length/2 + barPadding},0)`);
 
     g.append("rect")
       .attr("class", "bars")
       .attr("x", d => xScale(d.X) - innerWidth/data.length/2)
       .attr("y", d => yScale(d.Y))
-      .attr("width", innerWidth/data.length-1.5)
+      .attr("width", innerWidth/data.length-10)
       .attr("height", (d) => innerHeight - yScale(d.Y))
       .attr("fill","#F37218")
       .append('title')
